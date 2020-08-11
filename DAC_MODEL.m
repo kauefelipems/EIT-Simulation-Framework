@@ -1,22 +1,22 @@
 classdef DAC_MODEL
     
     properties
-        fsampling = 1e6; 
+        fs = 1e6; 
         n_bits = 12;
         full_scale = 3.3;
     end
     
     methods
         
-        function obj = Set_DAC(obj, fsampling, n_bits, full_scale)
-            obj.fsampling = fsampling; 
+        function obj = DAC_MODEL(fs, n_bits, full_scale)
+            obj.fs = fs; 
             obj.n_bits = n_bits;
             obj.full_scale = full_scale;
         end
         
         function out = sample(obj, signal)
             for i = 1:length(signal)
-                sampled_time = signal(i).time(1) : 1/obj.fsampling : signal(i).time(end);
+                sampled_time = signal(i).time(1) : 1/obj.fs : signal(i).time(end);
                 
                 for j = 1:length(sampled_time)
                     [ d, ix ] = min( abs( signal(i).time - sampled_time(j) ) );
@@ -41,7 +41,7 @@ classdef DAC_MODEL
         function out = sine(obj, f_sig, v_amp, n_periods)
 
             %D/A time discretization
-            DA_time = (0 : 1/obj.fsampling :(n_periods/f_sig));
+            DA_time = (0 : 1/obj.fs :(n_periods/f_sig));
 
             %Signal definition
             ideal_sig = v_amp*sin(2*pi*f_sig*DA_time);

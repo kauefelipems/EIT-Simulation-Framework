@@ -1,15 +1,15 @@
 classdef ADC_MODEL
     
     properties
-        fsampling = 1e6; 
+        fs = 1e6; 
         n_bits = 16;
         full_scale = 3.3;
     end
     
     methods
         
-        function obj = Set_ADC(obj, fsampling, n_bits, full_scale)
-            obj.fsampling = fsampling; 
+        function obj = ADC_MODEL(fs, n_bits, full_scale)
+            obj.fs = fs; 
             obj.n_bits = n_bits;
             obj.full_scale = full_scale;
         end
@@ -27,7 +27,7 @@ classdef ADC_MODEL
         
         function ideal_sample = sample(obj, packg)
             for i = 1:length(packg)
-                sampled_time = packg(i).time(1) : 1/obj.fsampling : packg(i).time(end);
+                sampled_time = packg(i).time(1) : 1/obj.fs : packg(i).time(end);
                 
                 for j = 1:length(sampled_time)
                     [ d, ix ] = min( abs( packg(i).time - sampled_time(j) ) );

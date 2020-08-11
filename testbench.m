@@ -60,11 +60,11 @@ fs = 1e6;
 n_bits = 12;
 full_scale = 3.3;
 
-dac_1 = DAC_MODEL;
-dac_1.Set_DAC(fs, n_bits, full_scale);
+%Generate DAC sampled sine wave 
+dac_1 = DAC_MODEL(fs, n_bits, full_scale);
 sine_wave = dac_1.sine(fsignal, v_amp, periods);
 
-%Create file
+%Create stimulus file for PWL source
 stimulus_file = [testbench_path 'DA_output.txt'];
 path_list = [path_list, stimulus_file];
 PWL_write(stimulus_file, sine_wave.time, sine_wave.amp)
@@ -142,8 +142,7 @@ pspice_output.homimg = READ_CURVES([pspice_output_path file_name1]);
 pspice_output.inhomimg = READ_CURVES([pspice_output_path file_name2]);
 
 %% Sample and process the measurement vector -----------------------------------------------------------------------------------------------
-adc_1 = ADC_MODEL;
-adc_1.Set_ADC(1e6, 14, 10);
+adc_1 = ADC_MODEL(1e6, 14, 10);
 
 %Digitalize and average homogeneous data
 homg_window = adc_1.packg(pspice_output.homimg, trigger);
