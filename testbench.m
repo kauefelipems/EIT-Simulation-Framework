@@ -5,7 +5,7 @@ testbench_path = 'C:\\Users\\Kaue\\Documents\\MATLAB\\EIT Simulation Framework\\
 
 %% Create an SPICE netlist of a FEM model-----------------------------------------------------------------------------------------------
 
-%This steps, except the eit_spice(), are application dependent.
+% These steps, except the eit_spice(), are application dependent.
 
 %Ideal phantom settings
 n_elec= 16; 
@@ -165,6 +165,8 @@ inh_expdata = inh_idealdata';
 inh_expdata.meas = inh_data_norm;
 
 %% Reconstruct image -------------------------------------------------------------------------------------------------------------------------
+
+% These steps are application dependent.
 
 % Create model for reconstruction
 
