@@ -3,7 +3,9 @@ pspice_output_path = 'C:\\Users\\Kaue\\Documents\\MATLAB\\EIT Simulation Framewo
 netlist_path = 'C:\\Users\\Kaue\\Documents\\MATLAB\\EIT Simulation Framework\\NETLIST files\\';
 testbench_path = 'C:\\Users\\Kaue\\Documents\\MATLAB\\EIT Simulation Framework\\TESTBENCH files\\';
 
-%% Create sample SPICE netlist -----------------------------------------------------------------------------------------------
+%% Create an SPICE netlist of a FEM model-----------------------------------------------------------------------------------------------
+
+% This steps, except the eit_spice(), are application dependent.
 
 %Ideal phantom settings
 n_elec= 16; 
@@ -11,34 +13,37 @@ n_rings= 1;
 amp_ideal = 0.5e-3;
 med_conductivity = 2e-3;
 phantom_conductivity = 0.001e-3;
-
 options = {'no_meas_current','no_rotate_meas'};
+
+%Create EIDORS FEM model
 params= mk_circ_tank(12, [], n_elec );  
 
 params.stimulation= mk_stim_patterns(n_elec, n_rings, '{ad}','{ad}', ...
-                            options, amp_ideal);
+                            options, amp_ideal); %stimulation structure
 params.solve=      'fwd_solve_1st_order';
 params.system_mat= 'system_mat_1st_order';
-model = eidors_obj('fwd_model', params);
+model = eidors_obj('fwd_model', params); %instancing model
 show_fem(model ); 
 
-% create homogeneous image + simulate data
+% create homogeneous image + simulated data
 mat = med_conductivity * ones( size(model.elems,1) ,1);
 homg_img = eidors_obj('image', 'homogeneous image', ...
                      'elem_data', mat, ... 
-                     'fwd_model', model);
-homg_idealdata=fwd_solve(homg_img);
+                     'fwd_model', model); %img_structure
+homg_idealdata=fwd_solve(homg_img); %ideal data from the foward solver
                  
-% create inhomogeneous image + simulate data
+% create inhomogeneous image + simulated data
 mat([65,81,82,101,102,122])= phantom_conductivity;
 inh_img = eidors_obj('image', 'inhomogeneous image', ...
                      'elem_data', mat, ...
-                     'fwd_model', model);
-inh_idealdata=fwd_solve(inh_img);
+                     'fwd_model', model); %img_structure
+inh_idealdata=fwd_solve(inh_img); %ideal data from the foward solver
 
-% create SPICE netlist
-eit_spice(homg_img,[netlist_path 'homg_net']);       
-eit_spice(inh_img,[netlist_path 'inhomg_net']); 
+% create PSPICE netlist library (.LIB) at the corresponding folders
+% (Basically the eit_spice() function, but generating .LIB instead 
+%  of .s files)
+eit_pspice(homg_img,[netlist_path 'homg_net']);       
+eit_pspice(inh_img,[netlist_path 'inhomg_net']); 
 
 %% Create path_list for PWL files
 path_list = {};
