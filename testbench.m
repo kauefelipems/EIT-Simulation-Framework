@@ -5,7 +5,7 @@ testbench_path = 'C:\\Users\\Kaue\\Documents\\MATLAB\\EIT Simulation Framework\\
 
 %% Create an SPICE netlist of a FEM model-----------------------------------------------------------------------------------------------
 
-% This steps, except the eit_spice(), are application dependent.
+%This steps, except the eit_spice(), are application dependent.
 
 %Ideal phantom settings
 n_elec= 16; 
@@ -45,42 +45,29 @@ inh_idealdata=fwd_solve(inh_img); %ideal data from the foward solver
 eit_pspice(homg_img,[netlist_path 'homg_net']);       
 eit_pspice(inh_img,[netlist_path 'inhomg_net']); 
 
-%% Create path_list for PWL files
-path_list = {};
-
 %% Set stimulation signal file -----------------------------------------------------------------------------------------------
+
+% Create path_list for PWL files
+path_list = {};
 
 % Signal parameters
 fsignal = 10e3;
 v_amp = 1.65;
-points_per_period = 100000;
 periods = 5;
 
-% D/A parameters
-fs = 100*fsignal;
-n_bits = 4;
-v_ref = 3.3;
-DA_scale = v_ref;
+% DAC parameters
+fs = 1e6;
+n_bits = 12;
+full_scale = 3.3;
 
-%D/A time discretization
-DA_time = (0:1/fs:(periods/fsignal));
-
-%Signal definition
-ideal_sig = v_amp*sin(2*pi*fsignal*DA_time);
-offset_sig = v_ref/2 + ideal_sig;
-offset_sig = max(min(offset_sig,v_ref),0); %bound values
-
-%D/A amplitude discretization
-LSB = DA_scale/(2^n_bits-1);
-DA_sig = LSB*round(offset_sig/LSB);
-
-%Filter offset
-DA_sig = DA_sig - v_ref/2;
+dac_1 = DAC_MODEL;
+dac_1.Set_DAC(fs, n_bits, full_scale);
+sine_wave = dac_1.sine(fsignal, v_amp, periods);
 
 %Create file
 stimulus_file = [testbench_path 'DA_output.txt'];
 path_list = [path_list, stimulus_file];
-PWL_write(stimulus_file, DA_time', DA_sig')
+PWL_write(stimulus_file, sine_wave.time, sine_wave.amp)
 
 %% Set multiplexing patterning files -----------------------------------------------------------------------------------------------
 
