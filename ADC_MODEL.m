@@ -37,15 +37,14 @@ classdef ADC_MODEL
             end                 
         end
         
-        function dig_signal = digitalize(obj, ideal_sample)
+        function out = discretize(obj, ideal_sample)
 
             for i = 1:length(ideal_sample)                
-                offset_sample = obj.full_scale/2 + ideal_sample(i).amp;
-                offset_sample = max(min(offset_sample,obj.full_scale),0); %bound values
+                bound_sample = max(min(ideal_sample(i).amp,obj.full_scale),0); %bound values
 
                 LSB = obj.full_scale/(2^obj.n_bits-1); %amplitude discretization
-                dig_signal(i).amp = LSB*round(offset_sample/LSB) - obj.full_scale/2;
-                dig_signal(i).time = ideal_sample(i).time;               
+                out(i).amp = LSB*round(bound_sample/LSB);
+                out(i).time = ideal_sample(i).time;               
             end
             
         end
