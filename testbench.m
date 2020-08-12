@@ -148,23 +148,22 @@ adc_1 = ADC_MODEL(1e6, 14, 10);
 homg_window = adc_1.packg(pspice_output.homimg, trigger);
 homg_ideal_samp = adc_1.sample(homg_window);
 homg_dig_sample = adc_1.discretize(homg_ideal_samp);
-homg_data = adc_1.avg(homg_dig_sample,periods);
-homg_data_norm = homg_data/max(homg_data);
+homg_data_norm = adc_1.norm_avg(homg_dig_sample,periods);
 
 %Digitalize and average inhomogeneous data
 inh_window = adc_1.packg(pspice_output.inhomimg, trigger);
 inh_ideal_samp = adc_1.sample(inh_window);
 inh_dig_sample = adc_1.discretize(inh_ideal_samp);
-inh_data = adc_1.avg(inh_dig_sample,periods);
-inh_data_norm = inh_data/max(inh_data);
+inh_data_norm = adc_1.norm_avg(inh_dig_sample,periods);
 
-%Create structures for data
-homg_expdata = homg_idealdata';
-homg_expdata.meas = homg_data_norm;
-inh_expdata = inh_idealdata';
-inh_expdata.meas = inh_data_norm;
 
 %% Reconstruct image -------------------------------------------------------------------------------------------------------------------------
+
+%Create structures for data
+homg_expdata = homg_idealdata;
+homg_expdata.meas = homg_data_norm;
+inh_expdata = inh_idealdata;
+inh_expdata.meas = inh_data_norm;
 
 % These steps are application dependent.
 
