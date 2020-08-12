@@ -67,7 +67,7 @@ sine_wave = dac_1.sine(fsignal, v_amp, periods);
 %Create stimulus file for PWL source
 stimulus_file = [testbench_path 'DA_output.txt'];
 path_list = [path_list, stimulus_file];
-PWL_write(stimulus_file, sine_wave.time, sine_wave.amp)
+pwl_write(stimulus_file, sine_wave.time, sine_wave.amp)
 
 %% Set multiplexing patterning files -----------------------------------------------------------------------------------------------
 
@@ -119,13 +119,15 @@ for i = 1:ceil(log2(n_elec))
 
     path_list = [path_list, MUX_IP_file, MUX_IM_file, MUX_MP_file, MUX_MM_file];
     
-    PWL_write(MUX_IP_file, mux.time(1:end-1), mux.ip(:,i));
-    PWL_write(MUX_IM_file, mux.time(1:end-1), mux.im(:,i));
-    PWL_write(MUX_MP_file, mux.time(1:end-1), mux.mp(:,i));
-    PWL_write(MUX_MM_file, mux.time(1:end-1), mux.mm(:,i));
+    pwl_write(MUX_IP_file, mux.time(1:end-1), mux.ip(:,i));
+    pwl_write(MUX_IM_file, mux.time(1:end-1), mux.im(:,i));
+    pwl_write(MUX_MP_file, mux.time(1:end-1), mux.mp(:,i));
+    pwl_write(MUX_MM_file, mux.time(1:end-1), mux.mm(:,i));
 end
 
-%% Create file with PWL files paths -----------------------------------------------------------------------------------------------
+%% Create file with PWL paths -----------------------------------------------------------------------------------------------
+% The PWL_paths lists all PWL stimulus paths to facilitate the manual
+% source assignment on PSPICE 
 PWL_paths = [testbench_path 'PWL_paths.txt'];
 FILE = fopen(PWL_paths, 'wt');
 for i=1:length(path_list)
@@ -159,11 +161,16 @@ inh_data_norm = adc_1.norm_avg(inh_dig_sample,periods);
 
 %% Reconstruct image -------------------------------------------------------------------------------------------------------------------------
 
-%Create structures for data
-homg_expdata = homg_idealdata;
+% Create EIDORS measurement structures for PSPICE data
 homg_expdata.meas = homg_data_norm;
-inh_expdata = inh_idealdata;
+homg_expdata.time = NaN;
+homg_expdata.name = 'solved by fwd_solve_1st_order';
+homg_expdata.type = 'data';
+
 inh_expdata.meas = inh_data_norm;
+inh_expdata.time = NaN;
+inh_expdata.name = 'solved by fwd_solve_1st_order';
+inh_expdata.type = 'data';
 
 % These steps are application dependent.
 
