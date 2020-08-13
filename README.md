@@ -11,7 +11,7 @@ Requirements:
 - EIDORS and standard MATLAB libraries;
 - PSPICE or other alternative SPICE simulator with PWL functions.
 
-Simulation Steps (from examples testbench_stimulation.m and testbench_acquisition.m):
+# Simulation Steps :
 
 - EIDORS SIDE (testbench_stimulation.m)
   - Set the path variables on the testbench; 
