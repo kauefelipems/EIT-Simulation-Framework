@@ -1,7 +1,6 @@
 %% Read the PSPICE output files 
-
-file_name1 = 'Data-hoimg.csv'
-file_name2 = 'Data-inhoimg.csv'
+file_name1 = '\\Data-hoimg.csv';
+file_name2 = '\\Data-inhoimg.csv';
 pspice_output.homimg = READ_CURVES([pspice_output_path file_name1]);
 pspice_output.inhomimg = READ_CURVES([pspice_output_path file_name2]);
 
