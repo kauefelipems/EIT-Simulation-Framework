@@ -36,4 +36,4 @@ Simulation Steps (from examples testbench_stimulation.m and testbench_acquisitio
   - Pre-process the data using ADC_MODEL.avg(), ADC_MODEL.avg_norm() or another dedicated pre-processing method that is compatible with the implemented reconstruction algorithm;
   - Create EIDORS data structures using the pre-processed data;
   - Configure the reconstruction method using the EIDORS functions;
-  - Run testbench_acquisition.m to reconstruct the ideal and experimental images (ideal images were created by testbench_stimulation.m). 
+  - Run testbench_acquisition.m to reconstruct the ideal and experimental images (ideal data was created by testbench_stimulation.m). 
