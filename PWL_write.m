@@ -1,4 +1,4 @@
-function PWL_write = PWL_write(filename,time,val)
+function pwl_write = pwl_write(filename,time,val)
 %Write stimulus signal on a .txt file for PWL PSPICE sources
     FILE = fopen(filename, 'wt');
     format = '%.3fus %.3fV\n';
