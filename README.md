@@ -19,7 +19,7 @@ Simulation Steps (from examples testbench_stimulation.m and testbench_acquisitio
   - Convert the image structures into spice netlists to the .lib files at netlist_path;
   - Configure stimulation signal using DAC_MODEL class and pwl_write() function;
   - Configure control and trigger signals using MUX_CONTROL class and pwl_write() function;
-  - Run to generate PWL and netlist files. 
+  - Run testbench_stimulation.m to generate PWL and netlist files. 
   
 - PSPICE SIDE
   - Create CAPTURE parts for the .lib FEM netlists using MODEL EDITOR; 
@@ -35,4 +35,5 @@ Simulation Steps (from examples testbench_stimulation.m and testbench_acquisitio
   - Sample and discretize PSPICE data using ADC_MODEL methods;
   - Pre-process the data using ADC_MODEL.avg(), ADC_MODEL.avg_norm() or another dedicated pre-processing method that is compatible with the implemented reconstruction algorithm;
   - Create EIDORS data structures using the pre-processed data;
-  - Reconstruct the images using the desired algorithms.
+  - Configure the reconstruction method using the EIDORS functions;
+  - Run testbench_acquisition.m to reconstruct the ideal and experimental images (ideal images were created by testbench_stimulation.m). 
