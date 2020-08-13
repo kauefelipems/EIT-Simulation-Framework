@@ -1,9 +1,14 @@
 classdef DAC_MODEL
+    %Simulates digital-to-analog conversion. Can be used to sample an
+    %arbitrary signal vector or directly generate discretized
+    %pre-configured signals, such as sine waves.
+    %
+    %Used to generate PWL signals for PSPICE sources
     
     properties
-        fs = 1e6; 
-        n_bits = 12;
-        full_scale = 3.3;
+        fs = 1e6; %sampling frequency
+        n_bits = 12; %resolution
+        full_scale = 3.3; %full_scale voltage
     end
     
     methods
@@ -15,6 +20,7 @@ classdef DAC_MODEL
         end
         
         function out = sample(obj, signal)
+            %Samples arbitrary signal
             for i = 1:length(signal)
                 sampled_time = signal(i).time(1) : 1/obj.fs : signal(i).time(end);
                 
@@ -27,7 +33,7 @@ classdef DAC_MODEL
         end
         
         function out = discretize(obj, ideal_sample)
-
+            %Discretizes sampled signal amplitude
             for i = 1:length(ideal_sample)                
                 offset_sample = obj.full_scale/2 + ideal_sample(i).amp;
                 offset_sample = max(min(offset_sample,obj.full_scale),0); %bound values
@@ -39,7 +45,8 @@ classdef DAC_MODEL
         end
 
         function out = sine(obj, f_sig, v_amp, n_periods)
-
+            %Generates DAC sine wave
+            
             %D/A time discretization
             DA_time = (0 : 1/obj.fs :(n_periods/f_sig));
 
