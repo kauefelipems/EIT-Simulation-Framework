@@ -40,8 +40,7 @@ inh_img = eidors_obj('image', 'inhomogeneous image', ...
 inh_idealdata=fwd_solve(inh_img); %ideal data from the foward solver
 
 % create PSPICE netlist library (.LIB) at the corresponding folders
-% (Basically the eit_spice() function, but generating .LIB instead 
-%  of .s files)
+% (Basically the eit_spice() function, but generating .lib instead of .s)
 eit_pspice(homg_img,[netlist_path 'homg_net']);       
 eit_pspice(inh_img,[netlist_path 'inhomg_net']); 
 
@@ -71,43 +70,19 @@ pwl_write(stimulus_file, sine_wave.time, sine_wave.amp)
 
 %% Set multiplexing patterning files -----------------------------------------------------------------------------------------------
 
-n_measures = length(model.stimulation)*length(model.stimulation(1).meas_pattern(:,1));
+%Multiplexer parameters
+mux_on = 5;
+mux_off = 0;
+tsampling = periods/fsignal;
+tinj = 1000e-6;
+tmeas = 1000e-6;
+tinit = 3000e-6;
 
-%Multiplexers structure
-mux.amp = 5;
-mux.time = zeros(n_measures+1,1);
-mux.ip = zeros(n_measures,ceil(log2(n_elec)));
-mux.im = zeros(n_measures,ceil(log2(n_elec)));
-mux.mp = zeros(n_measures,ceil(log2(n_elec)));
-mux.mm = zeros(n_measures,ceil(log2(n_elec)));
+%Instancing control objects
+mux_1 = MUX_CONTROL(mux_amp, mux_off, tsampling, tinj, tmeas, tinit);
 
-mux.tsampling = periods/fsignal;
-mux.tinj = 1000e-6;
-mux.tmeas = 1000e-6;
-mux.tinit = 3000e-6;
-k = 1;
-time_step = mux.tinit;
-
-%Construct mux amplitude and time vectors 
-for i = 1:length(model.stimulation)
-    %Injection and Measurement pattern (1 = I+ and V+ and -1 = I- and V-) 
-    inj = model.stimulation(i).stim_pattern/amp_ideal;
-    meas = model.stimulation(i).meas_pattern;
-    time_step = time_step + mux.tinj;   
-    for j = 1:length(model.stimulation(1).meas_pattern(:,1))
-        mux.ip(k,:) = mux.amp*de2bi(find(inj==1)-1,ceil(log2(n_elec)));
-        mux.im(k,:) = mux.amp*de2bi(find(inj==-1)-1,ceil(log2(n_elec)));
-        mux.mp(k,:) = mux.amp*de2bi(find(meas(j,:)==1)-1,ceil(log2(n_elec)));
-        mux.mm(k,:) = mux.amp*de2bi(find(meas(j,:)==-1)-1,ceil(log2(n_elec)));
-        
-        time_step = time_step + mux.tmeas + mux.tsampling;
-        mux.time(k+1) = mux.time(k) + time_step;
-        trigger(k).start = mux.time(k+1) - mux.tsampling;
-        trigger(k).stop = mux.time(k+1);
-        time_step = 0;
-        k=k+1;        
-    end    
-end
+%Generating control PWL vector and sampling trigger for the ADC
+[mux, trigger] = mux_1.pwl_gen(model);
 
 %Construct mux PWL files
 for i = 1:ceil(log2(n_elec))
