@@ -1,7 +1,7 @@
 %% Setting file path folders
-pspice_output_path = 'C:\\path\\EIT Simulation Framework\\PSPICE files\\';
-netlist_path = 'C:\\path\\EIT Simulation Framework\\NETLIST files\\';
-testbench_path = 'C:\\path\\EIT Simulation Framework\\TESTBENCH files\\';
+pspice_output_path = 'C:\\Users\\Kaue\\Documents\\MATLAB\\EIT Simulation Framework\\PSPICE files\\';
+netlist_path = 'C:\\Users\\Kaue\\Documents\\MATLAB\\EIT Simulation Framework\\NETLIST files\\';
+testbench_path = 'C:\\Users\\Kaue\\Documents\\MATLAB\\EIT Simulation Framework\\TESTBENCH files\\';
 
 %% Create an SPICE netlist of a FEM model
 

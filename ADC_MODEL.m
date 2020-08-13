@@ -33,8 +33,8 @@ classdef ADC_MODEL
                 start_pack_index = find(signal.x >= trigger(i).start, 1);
                 stop_pack_index  = find(signal.x > trigger(i).stop, 1)-1;
                 
-                packg(1,i).time = signal.x(start_pack_index:stop_pack_index);
-                packg(1,i).amp = signal.y(start_pack_index:stop_pack_index);
+                packg(i).time = signal.x(start_pack_index:stop_pack_index);
+                packg(i).amp = signal.y(start_pack_index:stop_pack_index);
             end           
         end
         
@@ -44,9 +44,9 @@ classdef ADC_MODEL
                 sampled_time = packg(i).time(1) : 1/obj.fs : packg(i).time(end);
                 
                 for j = 1:length(sampled_time)
-                    [ d, ix ] = min( abs( packg(i).time - sampled_time(j) ) );
-                    ideal_sample(1,i).time(j) =  packg(i).time(ix);
-                    ideal_sample(1,i).amp(j) =  packg(i).amp(ix);
+                    [ d, ix ] = min( abs( packg(1,i).time - sampled_time(j) ) );
+                    ideal_sample(i).time(j) =  packg(i).time(ix);
+                    ideal_sample(i).amp(j) =  packg(i).amp(ix);
                 end
             end                 
         end
@@ -57,8 +57,8 @@ classdef ADC_MODEL
                 bound_sample = max(min(ideal_sample(i).amp,obj.full_scale),0); %bound values
 
                 LSB = obj.full_scale/(2^obj.n_bits-1); %amplitude discretization
-                out(1,i).amp = LSB*round(bound_sample/LSB);
-                out(1,i).time = ideal_sample(i).time;               
+                out(i).amp = LSB*round(bound_sample/LSB);
+                out(i).time = ideal_sample(i).time;               
             end
             
         end
@@ -66,8 +66,10 @@ classdef ADC_MODEL
         function out = avg(obj, dig_signal, n_avg)
             %Averages n_avg peak-to-peak amplitudes
             for i = 1:length(dig_signal)
-                out(1,i) = sum(maxk(dig_signal(i).amp,n_avg)-mink(dig_signal(i).amp,n_avg))./n_avg;
+                out(i) = sum(maxk(dig_signal(i).amp,n_avg)-mink(dig_signal(i).amp,n_avg))./n_avg;
             end
+            %making it compatible with inv_solve()
+            out = transp(out);
         end
 
         function out = norm_avg(obj, dig_signal, n_avg)
@@ -75,7 +77,8 @@ classdef ADC_MODEL
             for i = 1:length(dig_signal)
                 out(i) = sum(maxk(dig_signal(i).amp,n_avg)-mink(dig_signal(i).amp,n_avg))./n_avg;
             end
-            out = out/max(out);
+            %normalizing and making it compatible with inv_solve()
+            out = transp(out/max(out));
         end
     end
 end

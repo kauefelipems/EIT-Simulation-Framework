@@ -34,7 +34,7 @@ inh_expdata.time = NaN;
 inh_expdata.name = 'solved by fwd_solve_1st_order';
 inh_expdata.type = 'data';
 
-% These steps are application dependent.
+%These steps are application dependent.
 
 % Create model for reconstruction
 
