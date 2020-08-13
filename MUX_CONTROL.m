@@ -1,4 +1,6 @@
 classdef MUX_CONTROL
+    %Generation and management of stimulus signals for the switching 
+    %control bus
     
     properties
         v_on = 5; % control voltage value for logic 1
@@ -7,7 +9,7 @@ classdef MUX_CONTROL
                          % ADC trigger signal)
         t_inj = 1e-3; % stabilization time for injection switching 
         t_meas = 1e-3; % stabilization time for measurement switching
-        t_init = 3e-6; % initialization time delay
+        t_init = 1e-3; % initialization time delay
     end
     
     methods
