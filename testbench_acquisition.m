@@ -64,7 +64,7 @@ inv2d= eidors_obj('inv_model', inv2d);
 ideal_img= inv_solve( inv2d, inh_idealdata, homg_idealdata);
 show_slices(ideal_img);
 
-% Reconstruct and show ideal image
+% Reconstruct and show experimental image
 exp_img= inv_solve( inv2d, inh_expdata, homg_expdata);
 figure
 show_slices(exp_img);
