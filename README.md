@@ -40,7 +40,7 @@ Requirements:
 
 # PSPICE Example :
 
-The .zip file contains a testbench project (microEIT_TESTBENCH), an .OLB library (EIT_FRAMEWORK) and the homg_net and inh_net sample parts (.OLB files). The library contains a single-ended Howland source, a differential amplifier, and RC electrode subcircuits. The testbench provides a full schematic for EIT testing containing: 4 16-channel analog multiplexers, 16 PWL sources, power supply sources, excitation circuit, differential amplifier, electrodes and the homogeneous and inhomogeneous sample parts.
+The .rar file contains a testbench project (microEIT_TESTBENCH), an .OLB library (EIT_FRAMEWORK) and the homg_net and inh_net sample parts (.OLB files). The library contains a single-ended Howland source, a differential amplifier, and RC electrode subcircuits. The testbench provides a full schematic for EIT testing containing: 4 16-channel analog multiplexers, 16 PWL sources, power supply sources, excitation circuit, differential amplifier, electrodes and the homogeneous and inhomogeneous sample parts.
 
 - Usage:
   - Download and unzip the folder;
