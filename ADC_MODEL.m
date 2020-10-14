@@ -63,7 +63,7 @@ classdef ADC_MODEL
             
         end
         
-        function out = avg(obj, dig_signal, n_avg)
+        function out = avg_pp(obj, dig_signal, n_avg)
             %Averages n_avg peak-to-peak amplitudes
             for i = 1:length(dig_signal)
                 out(i) = sum(maxk(dig_signal(i).amp,n_avg)-mink(dig_signal(i).amp,n_avg))./n_avg;
@@ -72,13 +72,13 @@ classdef ADC_MODEL
             out = transp(out);
         end
 
-        function out = norm_avg(obj, dig_signal, n_avg)
-            %Averages n_avg peak-to-peak amplitudes and normalizes        
+        function out = avg(obj, dig_signal)
+            %Averages all points (DC excitation)
             for i = 1:length(dig_signal)
-                out(i) = sum(maxk(dig_signal(i).amp,n_avg)-mink(dig_signal(i).amp,n_avg))./n_avg;
+                out(i) = sum(dig_signal(i).amp)./length(dig_signal(i).amp);
             end
-            %normalizing and making it compatible with inv_solve()
-            out = transp(out/max(out));
+            %making it compatible with inv_solve()
+            out = transp(out);
         end
     end
 end

@@ -11,13 +11,13 @@ adc_1 = ADC_MODEL(1e6, 14, 10);
 homg_window = adc_1.packg(pspice_output.homimg, trigger);
 homg_ideal_samp = adc_1.sample(homg_window);
 homg_dig_sample = adc_1.discretize(homg_ideal_samp);
-homg_data_norm = adc_1.norm_avg(homg_dig_sample,periods);
+homg_data_norm = adc_1.avg_pp(homg_dig_sample,periods);
 
 %Digitalize and average inhomogeneous data
 inh_window = adc_1.packg(pspice_output.inhomimg, trigger);
 inh_ideal_samp = adc_1.sample(inh_window);
 inh_dig_sample = adc_1.discretize(inh_ideal_samp);
-inh_data_norm = adc_1.norm_avg(inh_dig_sample,periods);
+inh_data_norm = adc_1.avg_pp(inh_dig_sample,periods);
 
 
 %% Reconstruct image 
