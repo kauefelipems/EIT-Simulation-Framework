@@ -79,7 +79,7 @@ function out = netlist(Dprime, name)
          rr = rr +1;
       end
    end
-   out(end+1,1) = { '.ends' };
+   out(end+1,1) = { '.ENDS' };
 end
 
 function unit_test()
