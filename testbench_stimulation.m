@@ -1,6 +1,6 @@
 %% Setting file path folders
 
-mydir = '';
+mydir = 'C:\\Users\\DELL\\Documents\\MATLAB\\EIT-Simulation-Framework\\';
 
 netlist_path = [mydir 'NETLIST files'];
 testbench_path = [mydir 'TESTBENCH files'];
