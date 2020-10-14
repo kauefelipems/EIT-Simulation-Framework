@@ -28,10 +28,12 @@ function spice = eit_pspice(img, name)
    Dprime = model_reduce(img);
 %  disp(full(1./Dprime))
 %  disp(full(-1./(Dprime - tril(Dprime))));
-   spice = netlist(Dprime,name);
+   dir_split = split(name,'\\');
+   subcir_name = cell2mat(dir_split(end));
+   spice = netlist(Dprime,subcir_name); %subcircuit name = subcircuit file
 
    if nargout == 0
-      filename = [ name '.LIB' ];
+      filename = [ name '.lib' ];
       FILE = fopen(filename, 'w');
       fprintf(FILE,'%s\n',spice{:});
       fclose(FILE);
